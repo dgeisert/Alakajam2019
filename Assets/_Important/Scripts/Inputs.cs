@@ -19,11 +19,15 @@ public class Inputs : MonoBehaviour
     public float fireMana = 100, waterMana = 100, earthMana = 100;
     public float health = 100;
     public RectTransform fireManaSprite, waterManaSprite, earthManaSprite, healthSprite;
+    public Text fps;
+    float lastFPS;
+    int fpsCount = 0;
 
     float lastShootTime = 0;
     int color;
     void Start()
     {
+        lastFPS = Time.time;
         instance = this;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -34,6 +38,13 @@ public class Inputs : MonoBehaviour
     }
     void Update()
     {
+        fpsCount++;
+        if (lastFPS + 0.5f < Time.time)
+        {
+            lastFPS = Time.time;
+            fps.text = (fpsCount * 2).ToString();
+            fpsCount = 0;
+        }
         bool walking = false;
         if (Input.GetKey(KeyCode.W))
         {
@@ -218,6 +229,14 @@ public class Inputs : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("GameOver");
+        ObjectPool.instance.Reset();
+    }
+    public void Restart()
+    {
+        earthMana = 100;
+        fireMana = 100;
+        waterMana = 100;
+        health = 100;
+        SetSprites();
     }
 }

@@ -37,10 +37,22 @@ public class ObjectPool : MonoBehaviour
     {
         int i = type + (is_player ? 3 : 0);
         counts[i]++;
-        if(counts[i] >= 100){
+        if (counts[i] >= 100)
+        {
             counts[i] = 0;
         }
         projectiles[i][counts[i]].SetActive(false);
         return projectiles[i][counts[i]];
+    }
+
+    public void Reset()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 100; j++)
+            {
+                projectiles[i][j].SetActive(false);
+            }
+        }
     }
 }
