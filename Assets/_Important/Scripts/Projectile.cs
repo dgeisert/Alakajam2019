@@ -27,21 +27,21 @@ public class Projectile : MonoBehaviour
     {
         gameObject.SetActive(false);
         deathParticle.transform.SetParent(null);
+        deathParticle.transform.position = transform.position;
         deathParticle.SetActive(false);
         deathParticle.SetActive(true);
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
-        Debug.Log(col.collider.name);
-        Enemy e = col.collider.GetComponent<Enemy>();
+        Enemy e = col.GetComponent<Enemy>();
         if (e != null)
         {
             e.Hit(this);
         }
         else
         {
-            Inputs i = col.collider.GetComponent<Inputs>();
+            Inputs i = col.GetComponent<Inputs>();
             if (i != null)
             {
                 i.Hit(this);

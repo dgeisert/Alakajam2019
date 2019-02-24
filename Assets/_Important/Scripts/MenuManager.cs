@@ -1,11 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
-    bool MainMenu = true;
+    public static MenuManager instance;
+    public bool MainMenu = true;
     public GameObject mainMenu, inGameUI;
+    float startTime;
+    public float score;
+    public Text scoreText;
+
+    private void Start()
+    {
+        instance = this;
+    }
 
     // Update is called once per frame
     void Update()
@@ -14,18 +24,29 @@ public class MenuManager : MonoBehaviour
         {
             StartGame();
         }
+        if (!MainMenu)
+        {
+            scoreText.text = "Score: " + Mathf.Floor(score + (Time.time - startTime) * 1000).ToString();
+        }
     }
 
     void StartGame()
     {
+        score = 0;
+        startTime = Time.time;
+        EnemySpawner.instance.SpawnEnemy();
+        EnemySpawner.instance.SpawnEnemy();
+        EnemySpawner.instance.SpawnEnemy();
+        EnemySpawner.instance.SpawnEnemy();
+        EnemySpawner.instance.SpawnEnemy();
         inGameUI.SetActive(true);
         mainMenu.SetActive(false);
         MainMenu = false;
     }
-    void EndGame()
+    public void Reset()
     {
-        inGameUI.SetActive(true);
-        mainMenu.SetActive(false);
+        inGameUI.SetActive(false);
+        mainMenu.SetActive(true);
         MainMenu = true;
     }
 }

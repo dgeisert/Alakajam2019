@@ -6,6 +6,7 @@ public class ObjectPool : MonoBehaviour
 {
     public static ObjectPool instance;
     public GameObject fpe, fpp, wpe, wpp, epe, epp;
+    public int userCount, enemyCounnt;
     GameObject[][] projectiles;
     int[] counts;
     // Start is called before the first frame update
@@ -14,12 +15,12 @@ public class ObjectPool : MonoBehaviour
         instance = this;
         counts = new int[6];
         projectiles = new GameObject[6][];
-        projectiles[0] = SpawnProjectiles(fpe, 100);
-        projectiles[1] = SpawnProjectiles(wpe, 100);
-        projectiles[2] = SpawnProjectiles(epe, 100);
-        projectiles[3] = SpawnProjectiles(fpp, 100);
-        projectiles[4] = SpawnProjectiles(wpp, 100);
-        projectiles[5] = SpawnProjectiles(epp, 100);
+        projectiles[0] = SpawnProjectiles(fpe, enemyCounnt);
+        projectiles[1] = SpawnProjectiles(wpe, enemyCounnt);
+        projectiles[2] = SpawnProjectiles(epe, enemyCounnt);
+        projectiles[3] = SpawnProjectiles(fpp, userCount);
+        projectiles[4] = SpawnProjectiles(wpp, userCount);
+        projectiles[5] = SpawnProjectiles(epp, userCount);
     }
 
     GameObject[] SpawnProjectiles(GameObject prefab, int count)
@@ -37,7 +38,7 @@ public class ObjectPool : MonoBehaviour
     {
         int i = type + (is_player ? 3 : 0);
         counts[i]++;
-        if (counts[i] >= 100)
+        if (counts[i] >= projectiles[i].Length)
         {
             counts[i] = 0;
         }
@@ -49,7 +50,7 @@ public class ObjectPool : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
         {
-            for (int j = 0; j < 100; j++)
+            for (int j = 0; j < projectiles[i].Length; j++)
             {
                 projectiles[i][j].SetActive(false);
             }

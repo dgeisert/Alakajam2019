@@ -6,10 +6,12 @@ public class Enemy : MonoBehaviour
 {
     public int color; //0: fire, 1: water, 2: earth, -1: none
     public CharacterController cc;
-    public float speed = 1, health = 10, range = 20;
+    float speed = 100; 
+    public float health = 10, range = 20;
     public float[] shootAngles = new float[] { 0 };
     protected float lastShootTime;
     public float timeBetweenShoot = 1, angleDif;
+    public MeshRenderer meshRenderer;
 
     // Update is called once per frame
     protected virtual void Update()
@@ -34,7 +36,7 @@ public class Enemy : MonoBehaviour
         transform.LookAt(Inputs.instance.transform);
         if (Vector3.Distance(Inputs.instance.transform.position, transform.position) > range)
         {
-            cc.SimpleMove((Inputs.instance.transform.position - transform.position) * speed * Time.deltaTime);
+            cc.SimpleMove((Inputs.instance.transform.position - transform.position).normalized * speed * Time.deltaTime);
             return true;
         }
         return false;
@@ -42,6 +44,15 @@ public class Enemy : MonoBehaviour
 
     public void Hit(Projectile p)
     {
-        Debug.Log(p.color + ", " + color);
+        if(p.color != color)
+        {
+            health -= p.damage;
+            if (health <= 0)
+            {
+                MenuManager.instance.score += 2500;
+                EnemySpawner.instance.RemoveEnemy(this);
+                Destroy(gameObject);
+            }
+        }
     }
 }

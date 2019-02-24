@@ -27,6 +27,7 @@ public class Inputs : MonoBehaviour
     int color;
     void Start()
     {
+        Application.targetFrameRate = 60;
         lastFPS = Time.time;
         instance = this;
         Cursor.visible = false;
@@ -194,13 +195,34 @@ public class Inputs : MonoBehaviour
             switch (color)
             {
                 case 0:
-                    fireMana += p.damage;
+                    if(fireMana + p.damage < 100)
+                    {
+                        fireMana += p.damage;
+                    }
+                    else
+                    {
+                        fireMana = 100;
+                    }
                     break;
                 case 1:
-                    waterMana += p.damage;
+                    if (waterMana + p.damage < 100)
+                    {
+                        waterMana += p.damage;
+                    }
+                    else
+                    {
+                        waterMana = 100;
+                    }
                     break;
                 case 2:
-                    earthMana += p.damage;
+                    if (earthMana + p.damage < 100)
+                    {
+                        earthMana += p.damage;
+                    }
+                    else
+                    {
+                        earthMana = 100;
+                    }
                     break;
             }
         }
@@ -230,6 +252,9 @@ public class Inputs : MonoBehaviour
     public void Die()
     {
         ObjectPool.instance.Reset();
+        MenuManager.instance.Reset();
+        EnemySpawner.instance.Reset();
+        Restart();
     }
     public void Restart()
     {
